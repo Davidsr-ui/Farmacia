@@ -1,0 +1,32 @@
+<%- include('partials/head') %>
+<div class="d-flex justify-content-between mb-3">
+  <h3>Tipos de medicamento</h3>
+  <button class="btn btn-primary" id="btn-nuevo"><i class="bi bi-plus-lg"></i> Nuevo</button>
+</div>
+
+<table class="table table-striped bg-white shadow-sm">
+  <thead class="table-primary"><tr><th>Código</th><th>Descripción</th><th class="text-end">Acciones</th></tr></thead>
+  <tbody id="tabla"></tbody>
+</table>
+
+<div class="modal fade" id="modal" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">
+    <form id="form" novalidate>
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-titulo"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="errores" class="alert alert-danger d-none"></div>
+        <input type="hidden" name="CodTipoMed">
+        <label class="form-label">Descripción</label>
+        <input name="descripcion" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div></div>
+</div>
+<%- include('partials/foot', { script: 'tipos' }) %>
