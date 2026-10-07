@@ -18,5 +18,8 @@ router.get('/medicamentos', protegida, (req, res) => res.render('medicamentos'))
 router.get('/tipos', protegida, soloRoles('moderador', 'administrador'), (req, res) => res.render('tipos'));
 router.get('/especialidades', protegida, soloRoles('moderador', 'administrador'), (req, res) => res.render('especialidades'));
 router.get('/usuarios', protegida, soloRoles('administrador'), (req, res) => res.render('usuarios'));
+router.get('/laboratorios', protegida, soloRoles('moderador', 'administrador'), (req, res) => res.render('laboratorios'));
+router.get('/ordenes-compra', protegida, soloRoles('moderador', 'administrador'), (req, res) => res.render('ordenes_compra'));
+router.get('/ordenes-venta', protegida, soloRoles('moderador', 'administrador'), (req, res) => res.render('ordenes_venta'));
 
 module.exports = router;

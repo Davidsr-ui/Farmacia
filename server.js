@@ -30,6 +30,9 @@ app.use('/api/usuarios', require('./src/routes/usuarios'));
 app.use('/api/tipos', require('./src/routes/tipos'));
 app.use('/api/especialidades', require('./src/routes/especialidades'));
 app.use('/api/medicamentos', require('./src/routes/medicamentos'));
+app.use('/api/laboratorios', require('./src/routes/laboratorios'));
+app.use('/api/ordenes-compra', require('./src/routes/ordenesCompra'));
+app.use('/api/ordenes-venta', require('./src/routes/ordenesVenta'));
 
 async function insertarDatos() {
   const clave = await bcrypt.hash('Clave123', 10);

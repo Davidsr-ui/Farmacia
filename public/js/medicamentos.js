@@ -3,25 +3,26 @@ const form = document.getElementById('form');
 const puedeEditar = ROL === 'moderador' || ROL === 'administrador';
 const puedeEliminar = ROL === 'administrador';
 let lista = [];
-let tipos = [];
 
 if (puedeEditar) document.getElementById('btn-nuevo').classList.remove('d-none');
 
-// Las fechas llegan como "2026-01-31T00:00:00.000Z"; el input date quiere "2026-01-31"
+// "2026-01-31T00:00:00.000Z" -> "2026-01-31"
 const fecha = (f) => (f ? String(f).slice(0, 10) : '');
 
 async function cargarTipos() {
   const r = await api('/tipos');
-  tipos = r.data || [];
   document.getElementById('sel-tipo').innerHTML =
     '<option value="">-- Seleccione --</option>' +
-    tipos.map((t) => `<option value="${t.CodTipoMed}">${esc(t.descripcion)}</option>`).join('');
+    (r.data || []).map((t) => `<option value="${t.CodTipoMed}">${esc(t.descripcion)}</option>`).join('');
 }
 
-function nombreTipo(m) {
-  if (m.TipoMedic) return m.TipoMedic.descripcion;
-  const t = tipos.find((x) => x.CodTipoMed === m.CodTipoMed);
-  return t ? t.descripcion : m.CodTipoMed;
+// Solo moderador y administrador pueden listar especialidades en la API de páginas;
+// la API /especialidades permite a cualquier usuario con sesión.
+async function cargarEspecialidades() {
+  const r = await api('/especialidades');
+  document.getElementById('sel-esp').innerHTML =
+    '<option value="">-- Ninguna --</option>' +
+    (r.data || []).map((e) => `<option value="${e.CodEspec}">${esc(e.descripcionEsp)}</option>`).join('');
 }
 
 async function cargar() {
@@ -33,7 +34,8 @@ async function cargar() {
       <td>${esc(m.descripcionMed)}</td>
       <td>${esc(m.marca)}</td>
       <td>${esc(m.presentacion)}</td>
-      <td>${esc(nombreTipo(m))}</td>
+      <td>${esc(m.tipo ? m.tipo.descripcion : m.CodTipoMed)}</td>
+      <td>${esc(m.especialidad ? m.especialidad.descripcionEsp : '-')}</td>
       <td>S/ ${Number(m.precioVentaUni).toFixed(2)}</td>
       <td>S/ ${Number(m.precioVentaPres).toFixed(2)}</td>
       <td>${m.stock}</td>
@@ -55,6 +57,7 @@ function abrir(titulo, m = {}) {
   form.marca.value = m.marca || '';
   form.presentacion.value = m.presentacion || '';
   form.CodTipoMed.value = m.CodTipoMed || '';
+  form.CodEspec.value = m.CodEspec || '';
   form.precioVentaUni.value = m.precioVentaUni ?? '';
   form.precioVentaPres.value = m.precioVentaPres ?? '';
   form.stock.value = m.stock ?? '';
@@ -84,4 +87,4 @@ form.addEventListener('submit', async (e) => {
   if (r.ok) { modal.hide(); cargar(); } else mostrarErrores(r.errores);
 });
 
-(async () => { await cargarTipos(); await cargar(); })();
+(async () => { await cargarTipos(); await cargarEspecialidades(); await cargar(); })();

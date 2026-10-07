@@ -8,7 +8,7 @@
 <table class="table table-striped bg-white shadow-sm">
   <thead class="table-primary">
     <tr>
-      <th>Código</th><th>Descripción</th><th>Marca</th><th>Presentación</th><th>Tipo</th>
+      <th>Código</th><th>Descripción</th><th>Marca</th><th>Presentación</th><th>Tipo</th><th>Especialidad</th>
       <th>P. Unit.</th><th>P. Present.</th><th>Stock</th><th>Fabricación</th><th>Vencimiento</th>
       <th class="text-end">Acciones</th>
     </tr>
@@ -36,12 +36,14 @@
             <input name="presentacion" class="form-control"></div>
           <div class="col-md-6"><label class="form-label">Tipo</label>
             <select name="CodTipoMed" id="sel-tipo" class="form-select"></select></div>
-          <div class="col-md-4"><label class="form-label">Precio unitario</label>
-            <input name="precioVentaUni" type="number" step="0.01" class="form-control"></div>
-          <div class="col-md-4"><label class="form-label">Precio presentación</label>
-            <input name="precioVentaPres" type="number" step="0.01" class="form-control"></div>
-          <div class="col-md-4"><label class="form-label">Stock</label>
+          <div class="col-md-6"><label class="form-label">Especialidad</label>
+            <select name="CodEspec" id="sel-esp" class="form-select"></select></div>
+          <div class="col-md-6"><label class="form-label">Stock</label>
             <input name="stock" type="number" class="form-control"></div>
+          <div class="col-md-6"><label class="form-label">Precio unitario</label>
+            <input name="precioVentaUni" type="number" step="0.01" class="form-control"></div>
+          <div class="col-md-6"><label class="form-label">Precio presentación</label>
+            <input name="precioVentaPres" type="number" step="0.01" class="form-control"></div>
           <div class="col-md-6"><label class="form-label">Fecha fabricación</label>
             <input name="fechaFabricacion" type="date" class="form-control"></div>
           <div class="col-md-6"><label class="form-label">Fecha vencimiento</label>
