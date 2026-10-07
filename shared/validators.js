@@ -27,6 +27,11 @@
       ? ['La descripción debe tener al menos 3 caracteres.'] : [];
   }
 
+  function validarEspecialidad(d) {
+    return vacio(d.descripcionEsp) || d.descripcionEsp.trim().length < 3
+      ? ['La descripción debe tener al menos 3 caracteres.'] : [];
+  }
+
   function validarMedicamento(d) {
     const e = [];
     if (vacio(d.descripcionMed)) e.push('La descripción es obligatoria.');
@@ -44,10 +49,13 @@
   // Menú según rol: lo usan las vistas
   function menuPorRol(role) {
     const m = [{ texto: 'Inicio', href: '/menu' }, { texto: 'Medicamentos', href: '/medicamentos' }];
-    if (role === 'administrador' || role === 'moderador') m.push({ texto: 'Tipos', href: '/tipos' });
+    if (role === 'administrador' || role === 'moderador') {
+      m.push({ texto: 'Tipos', href: '/tipos' });
+      m.push({ texto: 'Especialidades', href: '/especialidades' });
+    }
     if (role === 'administrador') m.push({ texto: 'Usuarios', href: '/usuarios' });
     return m;
   }
 
-  return { ROLES, validarRegistro, validarLogin, validarTipo, validarMedicamento, menuPorRol };
+  return { ROLES, validarRegistro, validarLogin, validarTipo, validarEspecialidad, validarMedicamento, menuPorRol };
 });

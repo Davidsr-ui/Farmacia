@@ -13,9 +13,10 @@ router.get('/registro', (req, res) => (req.user ? res.redirect('/menu') : res.re
 router.get('/menu', protegida, (req, res) => res.render('menu'));
 router.get('/logout', (req, res) => res.clearCookie('token').redirect('/login'));
 
-// Paso 9: páginas del CRUD
+// Páginas del CRUD
 router.get('/medicamentos', protegida, (req, res) => res.render('medicamentos'));
 router.get('/tipos', protegida, soloRoles('moderador', 'administrador'), (req, res) => res.render('tipos'));
+router.get('/especialidades', protegida, soloRoles('moderador', 'administrador'), (req, res) => res.render('especialidades'));
 router.get('/usuarios', protegida, soloRoles('administrador'), (req, res) => res.render('usuarios'));
 
 module.exports = router;

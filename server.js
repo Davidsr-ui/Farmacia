@@ -3,7 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const path = require('path');
-const { sequelize, User, TipoMedic, Medicamento } = require('./src/model');
+const { sequelize, User, TipoMedic, Medicamento, Especialidad, Laboratorio } = require('./src/model');
 const { cargarUsuario } = require('./src/middleware/auth');
 const V = require('./shared/validators');
 
@@ -28,6 +28,7 @@ app.use('/', require('./src/routes/pages'));
 app.use('/api/auth', require('./src/routes/auth'));
 app.use('/api/usuarios', require('./src/routes/usuarios'));
 app.use('/api/tipos', require('./src/routes/tipos'));
+app.use('/api/especialidades', require('./src/routes/especialidades'));
 app.use('/api/medicamentos', require('./src/routes/medicamentos'));
 
 async function insertarDatos() {
@@ -41,12 +42,16 @@ async function insertarDatos() {
       { descripcionMed: 'Amoxicilina 500 mg', marca: 'Portugal', presentacion: 'Caja x 50', stock: 120, precioVentaUni: 0.9, precioVentaPres: 40, fechaFabricacion: '2026-02-01', fechaVencimiento: '2027-12-01', CodTipoMed: b.CodTipoMed },
     ]);
   }
+  if (await Especialidad.count() === 0)
+    await Especialidad.bulkCreate([{ descripcionEsp: 'Medicina general' }, { descripcionEsp: 'Pediatría' }]);
+  if (await Laboratorio.count() === 0)
+    await Laboratorio.create({ razonSocial: 'Laboratorios Genfar S.A.', direccion: 'Av. Principal 123', telefono: '999888777', email: 'ventas@genfar.com', contacto: 'Juan Pérez' });
 }
 
 const PORT = process.env.PORT || 4000;
 (async () => {
   await sequelize.authenticate();
-  await sequelize.sync();   // crea las tablas y relaciones en PostgreSQL
+  await sequelize.sync({ alter: true });   // TEMPORAL: añade CodEspec y las tablas nuevas. Luego vuelve a sync()
   await insertarDatos();
   app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
 })().catch((e) => console.error('No se pudo iniciar:', e.message));
