@@ -2,20 +2,18 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
-const { crearBaseDeDatos } = require('./src/config/db');
+const path = require('path');
 const { sequelize, User, TipoMedic, Medicamento } = require('./src/model');
 const { cargarUsuario } = require('./src/middleware/auth');
+const V = require('./shared/validators');
 
 const app = express();
+app.set('trust proxy', 1); // Render usa proxy HTTPS
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
-app.use('/shared', express.static('shared')); // para que el navegador use el mismo validators.js
+app.use('/shared', express.static('shared')); // el navegador usa el mismo validators.js
 app.use(cargarUsuario);
-app.use('/api/usuarios', require('./src/routes/usuarios'));
-
-const path = require('path');
-const V = require('./shared/validators');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -28,9 +26,9 @@ app.use((req, res, next) => {
 
 app.use('/', require('./src/routes/pages'));
 app.use('/api/auth', require('./src/routes/auth'));
+app.use('/api/usuarios', require('./src/routes/usuarios'));
 app.use('/api/tipos', require('./src/routes/tipos'));
 app.use('/api/medicamentos', require('./src/routes/medicamentos'));
-
 
 async function insertarDatos() {
   const clave = await bcrypt.hash('Clave123', 10);
@@ -47,8 +45,8 @@ async function insertarDatos() {
 
 const PORT = process.env.PORT || 4000;
 (async () => {
-  await crearBaseDeDatos();
-  await sequelize.sync();   // crea las tablas y relaciones en bd_Farmacia
+  await sequelize.authenticate();
+  await sequelize.sync();   // crea las tablas y relaciones en PostgreSQL
   await insertarDatos();
-  app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
+  app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
 })().catch((e) => console.error('No se pudo iniciar:', e.message));
