@@ -1,6 +1,5 @@
-<%- include('partials/head') %>
+<%- include('partials/head', { fullWidth: true }) %>
 <style>
-  body > .container { max-width: 100%; padding: 0 !important; }
   .login-split { min-height: 100vh; }
   .login-imagen {
     background: url('/img/farmacia.jpg') center / cover no-repeat;
@@ -8,11 +7,14 @@
   }
 </style>
 
-<div class="container-fluid">
+<div class="container-fluid p-0">
   <div class="row login-split g-0">
 
-    <!-- Izquierda: formulario -->
-    <div class="col-md-6 order-1 d-flex align-items-center justify-content-center bg-white">
+    <!-- Izquierda: imagen (oculta en celulares) -->
+    <div class="col-md-6 order-1 d-none d-md-block login-imagen"></div>
+
+    <!-- Derecha: formulario -->
+    <div class="col-md-6 order-2 d-flex align-items-center justify-content-center bg-white">
       <div class="w-100 p-4" style="max-width: 420px;">
         <h2 class="fw-bold text-primary mb-1">Farmacia</h2>
         <p class="text-muted mb-4">Inicie sesión para continuar</p>
@@ -34,9 +36,6 @@
         <p class="mt-4 mb-0 text-center">¿No tiene cuenta? <a href="/registro">Regístrese</a></p>
       </div>
     </div>
-
-    <!-- Derecha: imagen (oculta en celulares) -->
-    <div class="col-md-6 order-2 d-none d-md-block login-imagen"></div>
 
   </div>
 </div>
