@@ -1,12 +1,71 @@
 <%- include('partials/head') %>
-<h3 class="mb-4">Bienvenido, <%= user.nombre %></h3>
-<div class="row g-3">
-  <% menu.filter(m => m.href !== '/menu').forEach(m => { %>
-    <div class="col-md-4">
+<style>
+  .hero {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border-radius: 1rem;
+  }
+  .modulo {
+    border: 0;
+    border-radius: 1rem;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .modulo:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 .75rem 1.5rem rgba(13, 110, 253, .18) !important;
+  }
+  .modulo .icono {
+    width: 64px; height: 64px;
+    border-radius: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.9rem;
+  }
+</style>
+
+<%
+  // Icono, color y descripción de cada módulo según su ruta
+  const info = {
+    '/medicamentos':   { icono: 'bi-capsule',          color: 'primary',   desc: 'Catálogo, precios y stock' },
+    '/tipos':          { icono: 'bi-tags',             color: 'info',      desc: 'Clasificación de medicamentos' },
+    '/especialidades': { icono: 'bi-heart-pulse',      color: 'danger',    desc: 'Áreas médicas de uso' },
+    '/laboratorios':   { icono: 'bi-building',         color: 'success',   desc: 'Proveedores y contactos' },
+    '/ordenes-compra': { icono: 'bi-cart-plus',        color: 'warning',   desc: 'Pedidos a laboratorios' },
+    '/ordenes-venta':  { icono: 'bi-receipt',          color: 'secondary', desc: 'Salidas y requerimientos' },
+    '/usuarios':       { icono: 'bi-people',           color: 'dark',      desc: 'Cuentas y roles del sistema' },
+  };
+%>
+
+<!-- Bienvenida -->
+<div class="hero text-white p-4 p-md-5 mb-4 shadow-sm">
+  <div class="d-flex align-items-center gap-3">
+    <i class="bi bi-prescription2 display-4"></i>
+    <div>
+      <h2 class="fw-bold mb-1">Bienvenido, <%= user.nombre %></h2>
+      <p class="mb-0 opacity-75">
+        Sesión como <span class="badge bg-light text-primary text-uppercase"><%= user.role %></span>
+        · Seleccione un módulo para comenzar
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Módulos -->
+<div class="row g-4">
+  <% menu.filter(m => m.href !== '/menu').forEach(m => {
+       const i = info[m.href] || { icono: 'bi-grid', color: 'primary', desc: '' }; %>
+    <div class="col-12 col-sm-6 col-lg-4">
       <a class="text-decoration-none" href="<%= m.href %>">
-        <div class="card shadow-sm h-100"><div class="card-body text-center py-5">
-          <h5><%= m.texto %></h5>
-        </div></div>
+        <div class="card modulo shadow-sm h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="icono bg-<%= i.color %> bg-opacity-10 text-<%= i.color %>">
+              <i class="bi <%= i.icono %>"></i>
+            </div>
+            <div>
+              <h5 class="card-title text-dark mb-1"><%= m.texto %></h5>
+              <p class="card-text text-muted small mb-0"><%= i.desc %></p>
+            </div>
+            <i class="bi bi-chevron-right ms-auto text-muted"></i>
+          </div>
+        </div>
       </a>
     </div>
   <% }) %>

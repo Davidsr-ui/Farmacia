@@ -18,9 +18,10 @@ app.use(cargarUsuario);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Disponible en todas las vistas: el menú depende del rol del usuario
+// Disponible en todas las vistas: el menú depende del rol y se resalta la página actual
 app.use((req, res, next) => {
   res.locals.menu = V.menuPorRol(req.user && req.user.role);
+  res.locals.ruta = req.path;
   next();
 });
 
@@ -54,7 +55,7 @@ async function insertarDatos() {
 const PORT = process.env.PORT || 4000;
 (async () => {
   await sequelize.authenticate();
-  await sequelize.sync({ alter: true });   // TEMPORAL: añade CodEspec y las tablas nuevas. Luego vuelve a sync()
+  await sequelize.sync();   // crea solo las tablas que falten
   await insertarDatos();
   app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
 })().catch((e) => console.error('No se pudo iniciar:', e.message));
